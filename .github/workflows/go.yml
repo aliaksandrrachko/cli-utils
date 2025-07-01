@@ -20,9 +20,13 @@ jobs:
 
     - name: Print Go Envs
       run: go env
+
+    - name: Print Go Envs
+      run: go env
         
     - name: Build
-      run: go build -v -o ./uuidgen/cmd/uuidgen ./uuidgen/cmd/uuidgen.go
+      working-directory: ./uuidgen
+      run: go build -v -o ./cmd/uuidgen ./cmd/uuidgen.go
 
     - name: Test
-      run: go test -race -v ./uuidgen/...
+      run: go test -race -v ./...
