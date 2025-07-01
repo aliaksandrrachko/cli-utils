@@ -3,6 +3,8 @@ name: Go
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ "main" ]
 
@@ -38,3 +40,27 @@ jobs:
 
     # - name: Test
     #   run: go test -race -v ./...
+
+
+  release:
+    needs: build 
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download all binary artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: uuidgen-cross-platform-binaries
+        path: ./release-artifacts 
+
+    - name: Create GitHub Release and Upload Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release ${{ github.ref_name }}
+        body: |
+          This is a new release for version ${{ github.ref_name }}.
+          See the changelog for details.
+        files: ./release-artifacts/* 
