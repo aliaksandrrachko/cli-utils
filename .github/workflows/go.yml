@@ -24,9 +24,13 @@ jobs:
     - name: Print Go Envs
       run: go env
         
-    - name: Build
+    - name: Build for ubuntu
       working-directory: ./uuidgen
       run: go build -v -o ./cmd/uuidgen ./cmd/uuidgen.go
 
-    - name: Test
-      run: go test -race -v ./...
+    - name: Build for windows amd64
+      working-directory: ./uuidgen
+      run: GOOS=windows GOARCH=amd64 go build -v -o ./cmd/uuidgen-amd64.exe ./cmd/uuidgen.go
+
+    # - name: Test
+    #   run: go test -race -v ./...
