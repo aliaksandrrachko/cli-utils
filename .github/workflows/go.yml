@@ -26,11 +26,18 @@ jobs:
         
     - name: Build for ubuntu
       working-directory: ./uuidgen
-      run: go build -v -o ./cmd/uuidgen ./cmd/uuidgen.go
+      run: go build -v -o ./cmd/bin/uuidgen ./cmd/uuidgen.go
 
     - name: Build for windows amd64
       working-directory: ./uuidgen
-      run: GOOS=windows GOARCH=amd64 go build -v -o ./cmd/uuidgen-amd64.exe ./cmd/uuidgen.go
+      run: GOOS=windows GOARCH=amd64 go build -v -o ./cmd/bin/uuidgen-amd64.exe ./cmd/uuidgen.go
+
+    - name: Archive all binary artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: uuidgen-cross-platform-binaries
+        path: ./uuidgen/cmd/bin/
+        retention-days: 7
 
     # - name: Test
     #   run: go test -race -v ./...
